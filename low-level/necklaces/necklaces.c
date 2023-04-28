@@ -21,7 +21,7 @@ void fill(int* A, int n, int val)
     }
 }
 
-void count(int* Zahl, int* Base)
+int count(int* Zahl, int* Base)
 {
     int suf = N-1, br=0;
     static int cnt = 0;
@@ -36,7 +36,7 @@ void count(int* Zahl, int* Base)
         }
     }
 
-    if(suf<0) return;
+    if(suf<0) return -1;
 
 
     int i = suf; 
@@ -49,14 +49,38 @@ void count(int* Zahl, int* Base)
     }
 
     Zahl[suf]++;
-    print(Zahl);
+    //print(Zahl);
+    //count(Zahl, Base);
+    return suf;
 }
 
-void findNeck(int* A, int* B)
+void turn(int* A)
 {
+    int tmp=A[0];
 
+    for(int i=1; i<N; i++) 
+    {
+        A[i-1] = A[i];
+    }
+    A[N-1] = tmp;
+}
 
+void copy(int* A, int* B)
+{
+    for(int i=0; i<N; i++)
+    {
+        B[i] = A[i];
+    }
+}
 
+int greater(int* A, int* B){
+    int great = 0;
+    for(int i=0; i<N; i++) {
+        if(A[i] != B[i]) great=1;
+    }
+
+   // printf("--> %d", great);
+    return great;
 }
 
 
@@ -79,41 +103,48 @@ int mixedToDec(int* Zahl, int* Base)
     {
         res = res * Base[i] + Zahl[i];
     }
-    printf("%d", res);
     return res;    
 }
 
-void compare(int* Zahl, int* Min, int* Base)
+int compare(int* Zahl, int* Base)
 {
-    int dec = mixedToDec(Zahl, Base);
-    int found = 0;
-    
-    for(int i=0; i<10; i++)
-    {
-        if(Min[i] < 0) return;
+    int cnt = 0, res = 0;
+    int* cpy[N], cpyB[N];
+    int val = mixedToDec(Zahl, Base);
+    copy(Zahl, cpy);
+    copy(Base, cpyB);
 
-        if(dec==Min[i])
-        {
-            found = 1;
-            break;
-        }
+    for(int i=0; i<N-1; i++){
+        turn(cpy);
+        int dec = mixedToDec(cpy, cpyB);
+        //res = greater(Zahl, cpy);
+       if(dec >= val) cnt++;
     }
-
-    if(found) return;
-
+    //printf("\t%d\n", cnt);
+    return cnt;
 }
 
 int main() 
 {
     int Zahl[N], Base[N];
-    int min[100];
-    fill(Zahl, N, 1);
-    fill(Base, N, 16);
-    fill(min, 100, -1);
-    print(Zahl);
+    int res = 0, suf = 0, cnt = 0;
 
+    fill(Zahl, N, 0);
+    fill(Base, N, 2);
+    
+   // count(Zahl, Base);
+   // compare(Zahl);
+   // return;
 
-    //compare(Zahl, min);
+    do{
+        suf = count(Zahl, Base);
+        if(compare(Zahl, Base) == 3 && suf>=0) {
+            cnt++;
+            printf("%d Found: ", cnt);
+            print(Zahl);
+            res++;
+        }
+    }while(suf >= 0);
     //count(Zahl, Base);
     
 }
