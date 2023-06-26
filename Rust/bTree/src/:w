@@ -16,7 +16,7 @@ public class Main {
             	
                 String data = myReader.nextLine();
                 int val = Integer.parseInt(data);
-                // System.out.println(val);
+                System.out.println(val);
 		
                 bst.insert(val);
                 //bst.walk(bst.root);
@@ -34,8 +34,6 @@ public class Main {
 
         // Print the keys in the tree using inorder traversal
         bst.walk();
-        //
-        bst.search(0);
 
         // Search for a key
         int key = 58;
@@ -105,25 +103,13 @@ class BTree {
         }
     }
 
+    public int getHeight(Node x) {
+        int i = 0;
         
-
-    public int getHeight() {
-        int i = 1;
-        Node child = this.root;        
-        do 
-        {
-            if (child.children.size() > 0) {
-                child = child.children.get(0);
-                i += 1;
-            }
-            else
-            { 
-                child = null;
-            }
+        do {
+            Node child = x.children.get(0);
+            i += 1;
         } while(child!=null);
-
-
-        System.out.println("The height of the Tree is " + i + " \n"); 
 
         return i;
     }
@@ -171,50 +157,6 @@ class BTree {
                 traverse(node.children.get(i));
             }
         }
-    }
-
-    public Node search(int key) {
-       return findNode(this.root, key);
-    } 
-     
-    private Node findNode(Node x, int key) {
-        if (x.keys.size()>0) 
-        {
-            int i = 0;
-            while (i < x.keys.size() - 1)  
-            {
-               if (x.keys.get(i) <= key) 
-               {
-                    i++;
-               }
-               else 
-               {
-                    System.out.println("I" + i+ "\n"); 
-                    break;
-               }
-
-            } 
-
-            System.out.println("I==" + i+ "\n"); 
-            
-            if (x.keys.get(i) == key) {
-               
-                System.out.println("Found Node with Value: " + x.keys.get(i));
-                
-                for(int k = 0; k < x.keys.size(); k++) {
-                    System.out.println(k + "=" + x.keys.get(k));
-                }
-                return x;
-            }
-            else if (x.children.size() >= i)
-            {
-                return findNode(x.children.get(i), key);
-            }
-
-        }
-
-        System.out.println("Node with Key " + key + " not found in tree");
-        return null;
     }
 }
 
